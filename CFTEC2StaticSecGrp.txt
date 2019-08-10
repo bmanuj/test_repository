@@ -1,0 +1,38 @@
+{
+	"Parameters":{
+		"InstanceTypeParameter":{
+			"Type": "String",
+			"Default": "t2.micro",
+			"AllowedValues": ["t2.micro","m1.small","m1.large"],
+			"Description": "Enter a parameter"
+		},
+		"SgStackName":{
+			"Description":"aaa",
+			"Type":"String",
+			"Default": "CloudTcgStaticSgCft"
+		}
+	},
+
+    "Resources": {
+        "cloudTcgServerCft": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": "ami-00c79db59589996b9",
+                "InstanceType": {"Ref":"InstanceTypeParameter"},
+                "KeyName": "manuj-test-ec2",
+                "SecurityGroupIds": [{
+					"Fn::ImportValue":{
+						"Fn::Sub": "${SgStackName}-CtcgStaticSg"
+						}
+					}],
+                "SubnetId": "subnet-fe383596",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "cloud-tcg-static-sg-stack-server"
+                    }
+                ]
+            }
+        }
+    }
+}
